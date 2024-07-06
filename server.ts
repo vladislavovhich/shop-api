@@ -7,9 +7,9 @@ import ProductProperty from "./src/models/product-property.model"
 import app from "./app"
 import "dotenv/config"
 
-const PORT = process.env.NODE_DOCKER_PORT || 8080
+const PORT = process.env.PORT || 8080
 
-db.sync({ force: true }).then(async () => {
+db.sync({ force: false }).then(async () => {
     await Type.sync({force: false})
     await Property.sync({force: false})
     await Product.sync({force: false})

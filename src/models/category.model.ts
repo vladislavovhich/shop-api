@@ -5,6 +5,10 @@ import Property from './property.model'
 class Category extends Model {
     declare id: number
     declare name: string
+
+    declare addProperty: (property: Property) => Promise<Property | null>
+    declare hasProperty: (property: Property) => Promise<boolean | null>
+    declare removeProperty: (property: Property) => Promise<void>
 }
 
 Category.init({

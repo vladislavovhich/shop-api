@@ -7,10 +7,10 @@ router.get("/:id", PropertyController.get)
 
 router.get("/", PropertyController.getAll)
 
-router.put("/:id", PropertyController.update)
+router.put("/update/:id", PropertyController.update)
 
-router.post("/", PropertyController.create)
+router.post("/create", PropertyController.create)
 
-router.delete("/:id", PropertyController.delete)
+router.delete("/delete/:id", PropertyController.delete)
 
 export default router

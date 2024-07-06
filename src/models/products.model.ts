@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize'
 import sequelize from "../config/db"
+import Category from './category.model'
 
 class Product extends Model {
     declare id: number
@@ -21,5 +22,8 @@ Product.init({
     modelName: 'product',
     timestamps: false,
 })
+
+Category.hasOne(Product)
+Product.belongsTo(Category)
 
 export default Product
