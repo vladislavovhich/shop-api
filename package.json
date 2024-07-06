@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.ts",
+    "dev": "nodemon server.ts",
     "start": "npm-run-all swagger-autogen dev",
     "swagger-autogen": "node ./src/config/swagger.ts",
     "test": "jest"
