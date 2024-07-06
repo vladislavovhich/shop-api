@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import { CreateRequest, IdRequest, UpdateRequest } from '../types/property.types'
 import Type from '../models/type.model'
 import Property from '../models/property.model'
+import { BadRequest, NotFound } from '@tsed/exceptions'
 
 const PropertyController = {
     create: async (req: CreateRequest, res: Response) => {
@@ -10,9 +11,7 @@ const PropertyController = {
         const type = await Type.findByPk(typeId) 
 
         if (!type) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Type not found"
-            })
+            throw new BadRequest("Type not found")
         }
 
         const property = await Property.create({ 
@@ -33,9 +32,7 @@ const PropertyController = {
         const property = await Property.findByPk(propertyId)
 
         if (!property) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Property not found"
-            })
+            throw new NotFound("Property not found")
         }
 
         await property.destroy()

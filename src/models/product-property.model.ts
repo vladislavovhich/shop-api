@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 import sequelize from "../config/db"
 import Property from './property.model'
-import Product from './products.model'
+import Product from './product.model'
 
 class ProductProperty extends Model {
     declare id: number

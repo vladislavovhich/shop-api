@@ -1,5 +1,5 @@
 import db from "./src/config/db"
-import Product from "./src/models/products.model"
+import Product from "./src/models/product.model"
 import Type from "./src/models/type.model"
 import Property from "./src/models/property.model"
 import Category from "./src/models/category.model"
