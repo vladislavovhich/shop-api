@@ -3,12 +3,18 @@ import { StatusCodes } from 'http-status-codes'
 import { CreateRequest, UpdateRequest, IdRequest, PropertyActionRequest } from '../types/categories.types'
 import Category from '../models/category.model'
 import Property from '../models/property.model'
+import { CategoryService } from '../services/category.service'
+import { CreateCategoryDto } from '../dto/category/category-create.dto'
+import { UpdateCategoryDto } from '../dto/category/category-update.dto'
+import { CategoryPropertyDto } from '../dto/category/category-property.dto'
+import { PropertyService } from '../services/property.service'
+import { BadRequest } from '@tsed/exceptions'
 
 const CategoriesController = {
     create: async (req: CreateRequest, res: Response) => {
-        const category = await Category.create({ 
-            name: req.body.name 
-        })
+        const category = await CategoryService.create(new CreateCategoryDto({
+            name: req.body.name
+        }))
 
         res.status(StatusCodes.OK).send({
             category
@@ -17,15 +23,8 @@ const CategoriesController = {
 
     delete: async (req: IdRequest, res: Response) => {
         const categoryId = parseInt(req.params.id)
-        const category = await Category.findByPk(categoryId)
-
-        if (!category) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Category not found"
-            })
-        }
-
-        await category.destroy()
+        
+        await CategoryService.delete(categoryId)
 
         res.status(StatusCodes.OK).send({
             message: "Category successfully deleted"
@@ -34,15 +33,11 @@ const CategoriesController = {
 
     update: async (req: UpdateRequest, res: Response) => {
         const categoryId = parseInt(req.params.id)
-        const category = await Category.findByPk(categoryId)
         
-        if (!category) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Category not found"
-            })
-        }
-
-        await category.update({name: req.body.name})
+        const category = await CategoryService.update(new UpdateCategoryDto({
+            name: req.body.name,
+            id: categoryId
+        }))
 
         res.status(StatusCodes.OK).send({
             category
@@ -51,13 +46,8 @@ const CategoriesController = {
 
     get: async (req: IdRequest, res: Response) => {
         const categoryId = parseInt(req.params.id)
-        const category = await Category.findByPk(categoryId)
-
-        if (!category) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Category not found"
-            })
-        }
+        
+        const category = await CategoryService.get(categoryId)
 
         res.status(StatusCodes.OK).send({
             category
@@ -65,7 +55,7 @@ const CategoriesController = {
     },
 
     getAll: async (req: Request, res: Response) => {
-        const categories = await Category.findAll()
+        const categories = await CategoryService.getAll()
 
         res.status(StatusCodes.OK).send({
             categories
@@ -76,33 +66,12 @@ const CategoriesController = {
         const propertyId = parseInt(req.params.propertyId)
         const categoryId = parseInt(req.params.categoryId)
 
-        const category = await Category.findByPk(categoryId)
-        const property = await Property.findByPk(propertyId)
+        const category = await CategoryService.addProperty(new CategoryPropertyDto({
+            propertyId, 
+            categoryId
+        }))
 
-        if (!category) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Category not found"
-            })
-        }
-
-        if (!property) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Property not found"
-            })
-        }
-
-        const hasProperty = await category.hasProperty(property)
-
-        if (hasProperty) {
-            return res.status(StatusCodes.BAD_REQUEST).send({
-                message: `You've already added property '${property.name}' to category '${category.name}'`
-            })
-        }
-
-        await category.addProperty(property)
-        await category.reload({ include: [Property] })
-
-        return res.status(StatusCodes.NOT_FOUND).send({
+        res.status(StatusCodes.OK).send({
             category
         })
     },
@@ -111,33 +80,12 @@ const CategoriesController = {
         const propertyId = parseInt(req.params.propertyId)
         const categoryId = parseInt(req.params.categoryId)
 
-        const category = await Category.findByPk(categoryId)
-        const property = await Property.findByPk(propertyId)
+        const category = await CategoryService.removeProperty(new CategoryPropertyDto({
+            propertyId, 
+            categoryId
+        }))
 
-        if (!category) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Category not found"
-            })
-        }
-
-        if (!property) {
-            return res.status(StatusCodes.NOT_FOUND).send({
-                message: "Property not found"
-            })
-        }
-
-        const hasProperty = await category.hasProperty(property)
-
-        if (!hasProperty) {
-            return res.status(StatusCodes.BAD_REQUEST).send({
-                message: `Category '${category.name}' has no property '${property.name}', so you can't remove it`
-            })
-        }
-
-        await category.removeProperty(property)
-        await category.reload({ include: [Property] })
-
-        return res.status(StatusCodes.NOT_FOUND).send({
+        res.status(StatusCodes.OK).send({
             category
         })
     }
