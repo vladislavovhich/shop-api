@@ -6,7 +6,8 @@ class Property extends Model {
     declare id: number
     declare name: string
 
-    declare addType: (type: Type) => Promise<Type | null>
+    declare typeId: number
+    declare type: Type
     declare setType: (type: Type) => Promise<Type | null>
 }
 

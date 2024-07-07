@@ -6,6 +6,9 @@ import Product from './product.model'
 class ProductProperty extends Model {
     declare id: number
     declare value: string
+
+    declare setProduct: (product: Product) => Promise<void>
+    declare setProperty: (property: Property) => Promise<void>
 }
 
 ProductProperty.init({
@@ -19,10 +22,10 @@ ProductProperty.init({
     timestamps: false,
 })
 
-Property.hasOne(ProductProperty)
+Property.hasMany(ProductProperty, { onDelete: 'CASCADE' })
 ProductProperty.belongsTo(Property)
 
-Product.hasOne(ProductProperty)
+Product.hasMany(ProductProperty, { onDelete: 'CASCADE' })
 ProductProperty.belongsTo(Product)
 
 

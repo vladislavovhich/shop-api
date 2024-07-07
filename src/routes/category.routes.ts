@@ -1,20 +1,22 @@
 import express, { Router } from 'express'
-import CategoriesController from '../controllers/category.controller'
+import { CategoryController } from '../controllers/category.controller'
 
 const router: Router = express.Router()
 
-router.get("/:id", CategoriesController.get)
+router.get("/:id", CategoryController.get)
 
-router.get("/", CategoriesController.getAll)
+router.get("/", CategoryController.getAll)
 
-router.put("/update/:id", CategoriesController.update)
+router.put("/:id", CategoryController.update)
 
-router.post("/create", CategoriesController.create)
+router.post("", CategoryController.create)
 
-router.delete("/delete/:id", CategoriesController.delete)
+router.delete("/:id", CategoryController.delete)
 
-router.post("/:categoryId/property/:propertyId/add", CategoriesController.addProperty)
+router.get("/:id/properties", CategoryController.getCategoryProperties)
+  
+router.put("/:categoryId/add-property/:propertyId", CategoryController.addProperty)
     
-router.post("/:categoryId/property/:propertyId/remove", CategoriesController.removeProperty)
+router.delete("/:categoryId/remove-property/:propertyId", CategoryController.removeProperty)
 
-export default router
+export { router as CategoryRouter }

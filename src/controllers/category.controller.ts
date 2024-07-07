@@ -1,16 +1,12 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { CreateRequest, UpdateRequest, IdRequest, PropertyActionRequest } from '../types/categories.types'
-import Category from '../models/category.model'
-import Property from '../models/property.model'
+import { CreateRequest, UpdateRequest, IdRequest, PropertyActionRequest } from '../types/category.types'
 import { CategoryService } from '../services/category.service'
 import { CreateCategoryDto } from '../dto/category/category-create.dto'
 import { UpdateCategoryDto } from '../dto/category/category-update.dto'
 import { CategoryPropertyDto } from '../dto/category/category-property.dto'
-import { PropertyService } from '../services/property.service'
-import { BadRequest } from '@tsed/exceptions'
 
-const CategoriesController = {
+export const CategoryController = {
     create: async (req: CreateRequest, res: Response) => {
         const category = await CategoryService.create(new CreateCategoryDto({
             name: req.body.name
@@ -88,8 +84,14 @@ const CategoriesController = {
         res.status(StatusCodes.OK).send({
             category
         })
+    },
+
+    getCategoryProperties: async (req: IdRequest, res: Response) => {
+        const categoryId = parseInt(req.params.id)
+        const category = await CategoryService.getCategoryProperties(categoryId)
+
+        res.status(StatusCodes.OK).send({
+            category
+        })
     }
 }
-
-
-export default CategoriesController

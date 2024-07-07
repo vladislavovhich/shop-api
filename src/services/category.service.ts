@@ -5,6 +5,7 @@ import Category from "../models/category.model"
 import Property from "../models/property.model"
 import { CategoryPropertyDto } from "../dto/category/category-property.dto"
 import { PropertyService } from "./property.service"
+import Type from "../models/type.model"
 
 export const CategoryService = {
     create: async (createCategoryDto: CreateCategoryDto): Promise<Category> => {
@@ -28,12 +29,8 @@ export const CategoryService = {
     },
 
     delete: async (id: number): Promise<void> => {
-        const category = await Category.findByPk(id)
-
-        if (!category) {
-            throw new NotFound("Category not found")
-        }
-
+        const category = await CategoryService.get(id)
+        
         await category.destroy()
     },
 
@@ -81,6 +78,17 @@ export const CategoryService = {
 
         await category.removeProperty(property)
         await category.reload({ include: [Property] })
+
+        return category
+    },
+
+    getCategoryProperties: async (id: number): Promise<Category> => {
+        const category = await CategoryService.get(id)
+
+        await category.reload({include: [{
+            model: Property,
+            include: [Type]
+        }]})
 
         return category
     }

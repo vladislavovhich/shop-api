@@ -5,7 +5,7 @@ import { CreatePropertyDto } from '../dto/property/property-update.dto'
 import { PropertyService } from '../services/property.service'
 import { UpdatePropertyDto } from '../dto/property/property-create.dto'
 
-const PropertyController = {
+export const PropertyController = {
     create: async (req: CreateRequest, res: Response) => {
         const property = await PropertyService.create(new CreatePropertyDto({
             typeId: parseInt(req.body.typeId), 
@@ -59,6 +59,3 @@ const PropertyController = {
         })
     },
 }
-
-
-export default PropertyController

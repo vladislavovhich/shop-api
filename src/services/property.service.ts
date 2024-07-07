@@ -40,11 +40,7 @@ export const PropertyService = {
     },
 
     delete: async (id: number): Promise<void> => {
-        const property = await Property.findByPk(id)
-
-        if (!property) {
-            throw new NotFound("Property not found")
-        }
+        const property = await PropertyService.get(id)
 
         await property.destroy()
     },

@@ -6,6 +6,8 @@ class Product extends Model {
     declare id: number
     declare name: string
     declare price: number
+
+    declare setCategory: (category: Category) => Promise<Category | null>
 }
 
 Product.init({
