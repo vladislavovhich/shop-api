@@ -1,11 +1,11 @@
 import { BadRequest, NotFound } from "@tsed/exceptions";
 import { CreateProductDto, IPropertyDto } from "../dto/product/product-create.dto";
-import Product from "../models/product.model";
+import { Product } from "../models/product.model";
 import { CategoryService } from "./category.service";
-import Category from "../models/category.model";
-import { UpdateProductDto } from "../dto/product/update-product.dto";
-import ProductProperty from "../models/product-property.model";
-import Property from "../models/property.model";
+import { Category } from "../models/category.model";
+import { UpdateProductDto } from "../dto/product/product-update.dto";
+import { ProductProperty } from "../models/product-property.model";
+import { Property } from "../models/property.model";
 
 export const ProductService = {
     checkProperties: (category: Category, propertiesReceived: IPropertyDto[]) => {

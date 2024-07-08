@@ -1,11 +1,11 @@
 import { BadRequest, NotFound } from "@tsed/exceptions"
 import { CreateCategoryDto } from "../dto/category/category-create.dto"
 import { UpdateCategoryDto } from "../dto/category/category-update.dto"
-import Category from "../models/category.model"
-import Property from "../models/property.model"
+import { Category } from "../models/category.model"
+import { Property }  from "../models/property.model"
 import { CategoryPropertyDto } from "../dto/category/category-property.dto"
 import { PropertyService } from "./property.service"
-import Type from "../models/type.model"
+import { Type } from "../models/type.model"
 
 export const CategoryService = {
     create: async (createCategoryDto: CreateCategoryDto): Promise<Category> => {

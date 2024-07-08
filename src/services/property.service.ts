@@ -1,7 +1,7 @@
 import { BadRequest, NotFound } from "@tsed/exceptions"
 import { CreatePropertyDto } from "../dto/property/property-update.dto"
-import Property from "../models/property.model"
-import Type from "../models/type.model"
+import { Property } from "../models/property.model"
+import { Type } from "../models/type.model"
 import { UpdatePropertyDto } from "../dto/property/property-create.dto"
 
 export const PropertyService = {

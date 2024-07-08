@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize'
-import sequelize from "../config/db"
-import Property from './property.model'
-import Product from './product.model'
+import { sequelize } from "../config/db"
+import { Property } from './property.model'
+import { Product } from './product.model'
 
-class ProductProperty extends Model {
+export class ProductProperty extends Model {
     declare id: number
     declare value: string
     declare productId: number
@@ -30,6 +30,3 @@ ProductProperty.belongsTo(Property)
 
 Product.hasMany(ProductProperty, { onDelete: 'CASCADE' })
 ProductProperty.belongsTo(Product)
-
-
-export default ProductProperty

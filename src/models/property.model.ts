@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize'
-import sequelize from "../config/db"
-import Type from './type.model'
+import { sequelize } from "../config/db"
+import { Type } from './type.model'
 
-class Property extends Model {
+export class Property extends Model {
     declare id: number
     declare name: string
 
@@ -24,5 +24,3 @@ Property.init({
 
 Type.hasOne(Property)
 Property.belongsTo(Type)
-
-export default Property

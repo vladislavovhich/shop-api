@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
-import sequelize from "../config/db"
+import { sequelize } from "../config/db"
 
-class Type extends Model {
+export class Type extends Model {
     declare id: number
     declare name: string
 }
@@ -16,5 +16,3 @@ Type.init({
     modelName: 'type',
     timestamps: false,
 })
-
-export default Type
