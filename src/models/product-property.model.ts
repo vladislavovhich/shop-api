@@ -6,6 +6,8 @@ import Product from './product.model'
 class ProductProperty extends Model {
     declare id: number
     declare value: string
+    declare productId: number
+    declare propertyId: number
 
     declare setProduct: (product: Product) => Promise<void>
     declare setProperty: (property: Property) => Promise<void>
@@ -18,7 +20,8 @@ ProductProperty.init({
     },
 }, {
     sequelize,
-    modelName: 'product-value',
+    modelName: 'productProperty',
+    tableName: 'product_properties',
     timestamps: false,
 })
 

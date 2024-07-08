@@ -22,8 +22,6 @@ export const ProductService = {
         for (let propertyReceived of propertiesReceived) {
             let property = properties.find(prop => propertyReceived.propertyId == prop.id) as Property
 
-            console.log(property.type.name, propertyReceived.name, property.name)
-
             switch (property?.type.name) {
                 case "number": 
                     if (Number.isNaN(+propertyReceived.value)) {
@@ -41,6 +39,7 @@ export const ProductService = {
 
     create: async (createProductDto: CreateProductDto): Promise<Product> => {
         const category = await CategoryService.getCategoryProperties(createProductDto.categoryId)
+
         const propertiesReceived = createProductDto.properties
 
         ProductService.checkProperties(category, propertiesReceived)
@@ -65,10 +64,11 @@ export const ProductService = {
         return product
     },
 
-    update: async (updateProductDto: UpdateProductDto): Promise<Product> => {
+    update: async (updateProductDto: UpdateProductDto): Promise<Product | null> => {
         const category = await CategoryService.getCategoryProperties(updateProductDto.categoryId)
         const propertiesReceived = updateProductDto.properties
         const product = await ProductService.get(updateProductDto.id)
+        const productProperties = await product.getProductProperties()
 
         ProductService.checkProperties(category, propertiesReceived)
         
@@ -80,16 +80,21 @@ export const ProductService = {
         await product.setCategory(category)
 
         for (let property of propertiesReceived) {
-            await ProductProperty.update({
-                value: property.value,
-                productId: product.id,
-                propertyId: property.propertyId
-            }, { 
-                where: { 
-                    propertyId: property.propertyId, 
-                    productId: product.id
-                } 
-            })
+            const productProperty = productProperties.find(productProp => productProp.propertyId == property.propertyId)
+
+            if (!productProperty) {
+                await ProductProperty.create({
+                    value: property.value,
+                    productId: product.id,
+                    propertyId: property.propertyId
+                })
+            } else {
+                await productProperty.update({
+                    value: property.value,
+                    productId: product.id,
+                    propertyId: property.propertyId
+                })
+            }
         }
 
        await product.reload({include: [Category, {model: ProductProperty, include: [Property]}]})

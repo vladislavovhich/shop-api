@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 import sequelize from "../config/db"
 import Category from './category.model'
+import ProductProperty from './product-property.model'
 
 class Product extends Model {
     declare id: number
@@ -8,6 +9,7 @@ class Product extends Model {
     declare price: number
 
     declare setCategory: (category: Category) => Promise<Category | null>
+    declare getProductProperties: () => Promise<ProductProperty[]>
 }
 
 Product.init({
