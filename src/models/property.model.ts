@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from "../config/db"
 import { Type } from './type.model'
 
-export class Property extends Model {
+class Property extends Model {
     declare id: number
     declare name: string
 
@@ -24,3 +24,4 @@ Property.init({
 
 Type.hasOne(Property)
 Property.belongsTo(Type)
+export { Property }

@@ -3,7 +3,7 @@ import { sequelize } from "../config/db"
 import { Category } from './category.model'
 import { ProductProperty } from './product-property.model'
 
-export class Product extends Model {
+class Product extends Model {
     declare id: number
     declare name: string
     declare price: number
@@ -29,3 +29,5 @@ Product.init({
 
 Category.hasOne(Product)
 Product.belongsTo(Category)
+
+export { Product }

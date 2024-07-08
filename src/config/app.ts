@@ -4,13 +4,13 @@ import express, { Application } from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import { jwtStrategy } from "./src/config/passport"
+import { jwtStrategy } from "../config/passport"
 import passport from "passport"
-import { PropertyRouter } from "./src/routes/property.routes"
-import { CategoryRouter } from "./src/routes/category.routes"
-import { ProductRouter } from "./src/routes/product.routes"
-import { exceptionHandler } from "./src/middleware/exception-handler"
-import { AuthRouter } from "./src/routes/auth.routes"
+import { PropertyRouter } from "../routes/property.routes"
+import { CategoryRouter } from "../routes/category.routes"
+import { ProductRouter } from "../routes/product.routes"
+import { exceptionHandler } from "../middleware/exception-handler"
+import { UserRouter } from "../routes/user.routes"
 
 export const app: Application = express()
 
@@ -26,5 +26,5 @@ app.use(passport.initialize())
 app.use("/api/properties", PropertyRouter)
 app.use("/api/categories", CategoryRouter)
 app.use("/api/products", ProductRouter)
-app.use("/api/auth", AuthRouter)
+app.use("/api/users", UserRouter)
 app.use(exceptionHandler)   

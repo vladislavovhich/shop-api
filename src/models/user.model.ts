@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../config/db'
 import { Role } from './role.model'
 
-export class User extends Model {
+class User extends Model {
     declare id: number
     declare email: string
     declare password: string
@@ -34,3 +34,5 @@ User.init(
         timestamps: false,
   }
 )
+
+export { User }

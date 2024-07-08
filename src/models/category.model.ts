@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from "../config/db"
 import { Property } from './property.model'
 
-export class Category extends Model {
+class Category extends Model {
     declare id: number
     declare name: string
 
@@ -23,5 +23,7 @@ Category.init({
     timestamps: false,
 })
 
-Category.belongsToMany(Property, { through: 'category_property'})
-Property.belongsToMany(Category, { through: 'category_property'})
+Category.belongsToMany(Property, { through: 'category_properties'})
+Property.belongsToMany(Category, { through: 'category_properties'})
+
+export { Category }

@@ -6,7 +6,8 @@ import { Category } from "./src/models/category.model"
 import { ProductProperty } from "./src/models/product-property.model"
 import { Role } from "./src/models/role.model"
 import { User } from "./src/models/user.model"
-import { app } from "./app"
+import { Profile } from "./src/models/profile.model"
+import { app } from "./src/config/app"
 import "dotenv/config"
 
 const PORT = process.env.PORT || 8080
@@ -19,6 +20,7 @@ sequelize.sync({ force: false }).then(async () => {
     await ProductProperty.sync({force: false})
     await Role.sync({force: false})
     await User.sync({force: false})
+    await Profile.sync({force: false})
 
     const types: number = await Type.count()
 

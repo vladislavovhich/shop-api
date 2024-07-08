@@ -20,6 +20,11 @@ export interface ITokens {
 }
 
 export interface IAuthResult {
+    token: string,
+    user: User
+}
+
+export interface IRegisterResult {
     tokens: ITokens,
     user: User
 }
@@ -28,7 +33,19 @@ export interface CreateUserRequest extends Request {
     body: {
         email: string,
         password: string,
-        roleId: string
+        roleId: string,
+        name: string,
+        birthDate: string
+    }
+}
+
+export interface UpdateUserProfileRequest extends Request {
+    body: {
+        name: string,
+        birthDate: string
+    },
+    params: {
+        id: string
     }
 }
 

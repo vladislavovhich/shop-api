@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../config/db'
 import { User } from './user.model'
 
-export class Role extends Model {
+class Role extends Model {
     declare id: number
     declare name: string
 }
@@ -27,3 +27,5 @@ Role.hasMany(User, {
     foreignKey: 'roleId',
     as: 'users',
 })
+
+export { Role }
