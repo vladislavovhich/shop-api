@@ -8,6 +8,8 @@ import { CategoryPropertyDto } from '../dto/category/category-property.dto'
 
 export const CategoryController = {
     create: async (req: CreateRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+        
         const category = await CategoryService.create(new CreateCategoryDto({
             name: req.body.name
         }))
@@ -18,6 +20,8 @@ export const CategoryController = {
     },
 
     delete: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const categoryId = parseInt(req.params.id)
         
         await CategoryService.delete(categoryId)
@@ -28,6 +32,8 @@ export const CategoryController = {
     },
 
     update: async (req: UpdateRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const categoryId = parseInt(req.params.id)
         
         const category = await CategoryService.update(new UpdateCategoryDto({
@@ -41,6 +47,8 @@ export const CategoryController = {
     },
 
     get: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const categoryId = parseInt(req.params.id)
         
         const category = await CategoryService.get(categoryId)
@@ -51,6 +59,8 @@ export const CategoryController = {
     },
 
     getAll: async (req: Request, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const categories = await CategoryService.getAll()
 
         res.status(StatusCodes.OK).send({
@@ -59,6 +69,8 @@ export const CategoryController = {
     },
 
     addProperty: async (req: PropertyActionRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const propertyId = parseInt(req.params.propertyId)
         const categoryId = parseInt(req.params.categoryId)
 
@@ -73,6 +85,8 @@ export const CategoryController = {
     },
 
     removeProperty: async (req: PropertyActionRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const propertyId = parseInt(req.params.propertyId)
         const categoryId = parseInt(req.params.categoryId)
 
@@ -87,6 +101,8 @@ export const CategoryController = {
     },
 
     getCategoryProperties: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Category']
+
         const categoryId = parseInt(req.params.id)
         const category = await CategoryService.getCategoryProperties(categoryId)
 

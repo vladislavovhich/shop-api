@@ -11,7 +11,10 @@ import { CategoryRouter } from "../routes/category.routes"
 import { ProductRouter } from "../routes/product.routes"
 import { exceptionHandler } from "../middleware/exception-handler"
 import { UserRouter } from "../routes/user.routes"
+import swaggerUIPath from "swagger-ui-express"
+import { AuthRouter } from "../routes/auth.routes"
 
+const swaggerJson = require("../docs/swagger.json")
 export const app: Application = express()
 
 passport.use(jwtStrategy)
@@ -27,4 +30,6 @@ app.use("/api/properties", PropertyRouter)
 app.use("/api/categories", CategoryRouter)
 app.use("/api/products", ProductRouter)
 app.use("/api/users", UserRouter)
+app.use("/api/auth", AuthRouter)
+app.use('/api/docs', swaggerUIPath.serve, swaggerUIPath.setup(swaggerJson))
 app.use(exceptionHandler)   

@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from "../config/db"
 import { Category } from './category.model'
 import { ProductProperty } from './product-property.model'
+import { User } from './user.model'
 
 class Product extends Model {
     declare id: number
@@ -29,5 +30,8 @@ Product.init({
 
 Category.hasOne(Product)
 Product.belongsTo(Category)
+
+Product.belongsToMany(User, { through: 'carts'})
+User.belongsToMany(Product, { through: 'carts'})
 
 export { Product }

@@ -7,6 +7,8 @@ import { UpdatePropertyDto } from '../dto/property/property-create.dto'
 
 export const PropertyController = {
     create: async (req: CreateRequest, res: Response) => {
+        // #swagger.tags = ['Property']
+
         const property = await PropertyService.create(new CreatePropertyDto({
             typeId: parseInt(req.body.typeId), 
             name: req.body.name
@@ -18,6 +20,8 @@ export const PropertyController = {
     },
 
     delete: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Property']
+
         const propertyId = parseInt(req.params.id)
         
         await PropertyService.delete(propertyId)
@@ -28,6 +32,8 @@ export const PropertyController = {
     },
 
     update: async (req: UpdateRequest, res: Response) => {
+        // #swagger.tags = ['Property']
+
         const propertyId = parseInt(req.params.id)
         const typeId = parseInt(req.body.typeId)
  
@@ -43,6 +49,8 @@ export const PropertyController = {
     },
 
     get: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Property']
+
         const propertyId = parseInt(req.params.id)
         const property = await PropertyService.get(propertyId)
 
@@ -52,6 +60,8 @@ export const PropertyController = {
     },
 
     getAll: async (req: Request, res: Response) => {
+        // #swagger.tags = ['Property']
+        
         const properties = await PropertyService.getAll()
 
         res.status(StatusCodes.OK).send({

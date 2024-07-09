@@ -1,12 +1,10 @@
 import { Request } from "express"
-import { User } from "../models/user.model"
+import { User as UserModel } from "../models/user.model"
 import { JwtPayload } from "jsonwebtoken"
 
 declare global {
     namespace Express {
-        interface Request {
-            user?: User
-        }
+        export interface User extends UserModel {}
     }
 }
 
@@ -21,12 +19,12 @@ export interface ITokens {
 
 export interface IAuthResult {
     token: string,
-    user: User
+    user: UserModel
 }
 
 export interface IRegisterResult {
     tokens: ITokens,
-    user: User
+    user: UserModel
 }
 
 export interface CreateUserRequest extends Request {
@@ -43,9 +41,6 @@ export interface UpdateUserProfileRequest extends Request {
     body: {
         name: string,
         birthDate: string
-    },
-    params: {
-        id: string
     }
 }
 

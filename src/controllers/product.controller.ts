@@ -10,6 +10,8 @@ import { BadRequest } from "@tsed/exceptions"
 
 export const ProductController = {
     create: async (req: CreateRequest, res: Response) => {
+        // #swagger.tags = ['Product']
+
         const properties: IPropertyDto[] = req.body.properties.map(property => new PropertyDto({
             propertyId: property.propertyId,
             value: property.value,
@@ -29,6 +31,8 @@ export const ProductController = {
     },
 
     update: async (req: UpdateRequest, res: Response) => {
+        // #swagger.tags = ['Product']
+
         const properties: IPropertyDto[] = req.body.properties.map(property => new PropertyDto({
             propertyId: property.propertyId,
             value: property.value,
@@ -49,6 +53,8 @@ export const ProductController = {
     },
 
     delete: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Product']
+
         const productId = parseInt(req.params.id)
 
         await ProductService.delete(productId)
@@ -59,6 +65,8 @@ export const ProductController = {
     },
 
     get: async (req: IdRequest, res: Response) => {
+        // #swagger.tags = ['Product']
+
         const productId = parseInt(req.params.id)
         const product = await ProductService.get(productId)
 
@@ -68,6 +76,8 @@ export const ProductController = {
     },
 
     getAll: async (req: Request, res: Response) => {
+        // #swagger.tags = ['Product']
+        
         const products = await ProductService.getAll()
 
         res.status(StatusCodes.OK).send({
