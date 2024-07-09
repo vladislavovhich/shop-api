@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '../config/db'
 import { Role } from './role.model'
+import { Product } from './product.model'
 
 class User extends Model {
     declare id: number
@@ -12,6 +13,10 @@ class User extends Model {
     declare birthDate: Date
 
     declare setRole: (role: Role | null) => Promise<void>
+    declare setCartProducts: (products: (Product | number)[]) => Promise<void>
+    declare addCartProduct: (products: Product | number) => Promise<void>
+    declare hasCartProduct: (product: Product | number) => Promise<boolean>
+    declare removeCartProduct: (product: Product | number) => Promise<void>
 }
 
 User.init(

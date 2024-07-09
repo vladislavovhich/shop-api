@@ -7,6 +7,9 @@ import { UpdateProductDto } from "../dto/product/product-update.dto"
 import { IdRequest } from "../types/property.types"
 import { CategoryService } from "../services/category.service"
 import { BadRequest } from "@tsed/exceptions"
+import { CartService } from "../services/cart.service"
+import { CartOperationDto } from "../dto/cart/cart-operation.dto"
+import { UserService } from "../services/user.service"
 
 export const ProductController = {
     create: async (req: CreateRequest, res: Response) => {
@@ -83,6 +86,5 @@ export const ProductController = {
         res.status(StatusCodes.OK).send({
             products
         })
-    }
-
+    }    
 }

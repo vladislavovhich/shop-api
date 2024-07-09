@@ -24,4 +24,5 @@ Property.init({
 
 Type.hasOne(Property)
 Property.belongsTo(Type)
+
 export { Property }

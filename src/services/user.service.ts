@@ -1,9 +1,19 @@
+import { Request } from "express"
 import { User } from "../models/user.model"
-import { Role } from "../models/role.model"
 import { BadRequest, NotFound } from "@tsed/exceptions"
 import { UpdateProfileDto } from "../dto/user/user-update-profile.dto"
 
 export const UserService = {
+    extractUserFromReq: async (req: Request): Promise<User> => {
+        const user = await req.user
+
+        if (!user) {
+            throw new BadRequest("User not specified")
+        }
+
+        return user
+    },
+
     findByEmail: async (email: string): Promise<User | null> => {
         const user = await User.findOne({where: {email}})
 

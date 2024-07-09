@@ -1,14 +1,11 @@
 import { Request, Response } from "express"
-import { CreateUserRequest, ITokens, LoginUserRequest, UpdateUserProfileRequest } from "../types/user.types"
-import { UserService } from "../services/user.service"
-import { CreateUserDto } from "../dto/user/user-create.dto"
-import { LoginUserDto } from "../dto/user/user-login.dto"
+import { UpdateUserProfileRequest } from "../types/user.types"
 import { StatusCodes } from "http-status-codes"
 import { BadRequest } from "@tsed/exceptions"
 import { User } from "../models/user.model"
 import { IdRequest } from "../types/property.types"
-import { AuthService } from "../services/auth.service"
 import { UpdateProfileDto } from "../dto/user/user-update-profile.dto"
+import { UserService } from "../services/user.service"
 
 export const UserController = {
     updateProfile: async (req: UpdateUserProfileRequest, res: Response) => {

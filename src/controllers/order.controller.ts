@@ -8,7 +8,7 @@ import { BadRequest } from "@tsed/exceptions"
 
 export const OrderController = {
     makeOrder: async (req: MakeOrderRequest, res: Response) => {
-        // #swagger.tags = ['Order']
+        // #swagger.tags = ['Product']
         const user = (await req.user) as User
 
         if (!user) {
@@ -28,7 +28,7 @@ export const OrderController = {
     },
 
     userOrders: async (req: IdRequest, res: Response) => {
-        // #swagger.tags = ['Order']
+        // #swagger.tags = ['User']
 
         const userId = parseInt(req.params.id)
         const orders = await OrderService.ordersByUser(userId)
@@ -39,7 +39,7 @@ export const OrderController = {
     },
 
     getMyOrders: async (req: Request, res: Response) => {
-        // #swagger.tags = ['Order']
+        // #swagger.tags = ['User']
         console.log(req.user)
         const user = await req.user
 
