@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { CreateRequest, UpdateRequest, IdRequest, IdProductRequest } from "../types/review.types"
+import { CreateRequest, UpdateRequest, ReviewIdRequest } from "../types/review.types"
 import { UserService } from "../services/user.service"
 import { ReviewService } from "../services/review.service"
 import { CreateReviewDto } from "../dto/review/review-create.dto"
@@ -7,6 +7,7 @@ import { StatusCodes } from "http-status-codes"
 import { UpdateReviewDto } from "../dto/review/review-update.dto"
 import { ProductService } from "../services/product.service"
 import { ReviewEditDto } from "../dto/review/review-edit.dto"
+import { IdRequest } from "../types/common.types"
 
 export const ReviewController = {
     writeReview: async (req: CreateRequest, res: Response) => {
@@ -44,7 +45,7 @@ export const ReviewController = {
         })
     },
 
-    deleteReview: async (req: IdRequest, res: Response) => {
+    deleteReview: async (req: ReviewIdRequest, res: Response) => {
         // #swagger.tags = ['Product']
 
         await ReviewService.delete(new ReviewEditDto({
@@ -55,7 +56,7 @@ export const ReviewController = {
         res.sendStatus(StatusCodes.OK)
     },
 
-    getProductReviews: async (req: IdProductRequest, res: Response) => {
+    getProductReviews: async (req: IdRequest, res: Response) => {
         // #swagger.tags = ['Product']
 
         const reviews = await ReviewService.getProductReviews(parseInt(req.params.id))

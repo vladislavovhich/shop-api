@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { CreateRequest, IdRequest, UpdateRequest } from '../types/property.types'
+import { CreateRequest, UpdateRequest } from '../types/property.types'
+import { IdRequest } from '../types/common.types'
 import { CreatePropertyDto } from '../dto/property/property-update.dto'
 import { PropertyService } from '../services/property.service'
 import { UpdatePropertyDto } from '../dto/property/property-create.dto'

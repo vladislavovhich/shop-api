@@ -4,12 +4,7 @@ import { CreateRequest, UpdateRequest } from "../types/product.types"
 import { ProductService } from "../services/product.service"
 import { CreateProductDto, IPropertyDto, PropertyDto } from "../dto/product/product-create.dto"
 import { UpdateProductDto } from "../dto/product/product-update.dto"
-import { IdRequest } from "../types/property.types"
-import { CategoryService } from "../services/category.service"
-import { BadRequest } from "@tsed/exceptions"
-import { CartService } from "../services/cart.service"
-import { CartOperationDto } from "../dto/cart/cart-operation.dto"
-import { UserService } from "../services/user.service"
+import { IdRequest } from "../types/common.types"
 
 export const ProductController = {
     create: async (req: CreateRequest, res: Response) => {

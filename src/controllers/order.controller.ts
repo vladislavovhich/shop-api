@@ -1,19 +1,16 @@
 import { Request, Response } from "express"
-import { IdRequest, MakeOrderRequest } from "../types/order.types"
+import { MakeOrderRequest } from "../types/order.types"
+import { IdRequest } from "../types/common.types"
 import { OrderService } from "../services/order.service"
 import { OrderMakeDto } from "../dto/order/order-make.dto"
 import { StatusCodes } from "http-status-codes"
-import { User } from "../models/user.model"
-import { BadRequest } from "@tsed/exceptions"
+import { UserService } from "../services/user.service"
 
 export const OrderController = {
     makeOrder: async (req: MakeOrderRequest, res: Response) => {
         // #swagger.tags = ['Product']
-        const user = (await req.user) as User
 
-        if (!user) {
-            throw new BadRequest("User not specified")
-        }
+        const user = await UserService.extractUserFromReq(req)
 
         const order = await OrderService.makeOrder(new OrderMakeDto({
             date: new Date(),
@@ -40,12 +37,8 @@ export const OrderController = {
 
     getMyOrders: async (req: Request, res: Response) => {
         // #swagger.tags = ['User']
-        console.log(req.user)
-        const user = await req.user
 
-        if (!user) {
-            throw new BadRequest("User not specified")
-        }
+        const user = await UserService.extractUserFromReq(req)
 
         const orders = await OrderService.ordersByUser(user.id)
 

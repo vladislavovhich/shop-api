@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import Joi from 'joi';
 
 export interface CreateRequest extends Request {
     params: {
@@ -23,15 +24,23 @@ export interface UpdateRequest extends Request {
     }
 }
 
-export interface IdRequest extends Request {
+export interface ReviewIdRequest extends Request {
     params: {
         productId: string,
         reviewId: string
     }
 }
 
-export interface IdProductRequest extends Request {
-    params: {
-        id: string
-    }
-}
+export const CreateReviewParamsSchema = Joi.object({
+    productId: Joi.number().integer().min(1).required()
+})
+
+export const ReviewReqSchema = Joi.object({
+    rating: Joi.number().integer().min(1).max(10).required(),
+    text: Joi.string().required()
+})
+
+export const ReviewIdReqSchema = Joi.object({
+    productId: Joi.number().integer().min(1).required(),
+    reviewId: Joi.number().integer().min(1).required()
+})

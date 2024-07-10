@@ -3,7 +3,7 @@ import { UpdateUserProfileRequest } from "../types/user.types"
 import { StatusCodes } from "http-status-codes"
 import { BadRequest } from "@tsed/exceptions"
 import { User } from "../models/user.model"
-import { IdRequest } from "../types/property.types"
+import { IdRequest } from "../types/common.types"
 import { UpdateProfileDto } from "../dto/user/user-update-profile.dto"
 import { UserService } from "../services/user.service"
 
@@ -11,11 +11,7 @@ export const UserController = {
     updateProfile: async (req: UpdateUserProfileRequest, res: Response) => {
         // #swagger.tags = ['User']
 
-        const user = (await req.user) as User
-
-        if (!user) {
-            throw new BadRequest("No user specified")
-        }
+        const user = await UserService.extractUserFromReq(req)
 
         const userUpdated = await UserService.updateProfile(new UpdateProfileDto({
             name: req.body.name,
@@ -37,11 +33,7 @@ export const UserController = {
     getMyProfile: async (req: Request, res: Response) => {
         // #swagger.tags = ['User']
 
-        const user = (await req.user) as User
-
-        if (!user) {
-            throw new BadRequest("User not specified")
-        }
+        const user = await UserService.extractUserFromReq(req)
 
         res.status(StatusCodes.OK).send({ user })
     }

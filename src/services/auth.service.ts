@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { ITokens, IAuthResult, IPayload, IRegisterResult } from "../types/user.types"
+import { IAuthResult, IRegisterResult } from "../types/user.types"
+import { ITokens, IPayload } from "../types/common.types"
 import { ICreateUserDto } from "../dto/user/user-create.dto"
 import { ILoginUserDto } from "../dto/user/user-login.dto"
 import { User } from "../models/user.model"

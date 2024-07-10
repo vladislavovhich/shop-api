@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { CreateRequest, UpdateRequest, IdRequest, PropertyActionRequest } from '../types/category.types'
+import { CreateRequest, UpdateRequest, PropertyActionRequest } from '../types/category.types'
+import { IdRequest } from '../types/common.types'
 import { CategoryService } from '../services/category.service'
 import { CreateCategoryDto } from '../dto/category/category-create.dto'
 import { UpdateCategoryDto } from '../dto/category/category-update.dto'

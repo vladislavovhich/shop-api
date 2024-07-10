@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { IdRequest } from "../types/product.types"
+import { IdRequest } from "../types/common.types"
 import { UserService } from "../services/user.service"
 import { CartService } from "../services/cart.service"
 import { CartOperationDto } from "../dto/cart/cart-operation.dto"

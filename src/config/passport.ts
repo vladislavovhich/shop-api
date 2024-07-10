@@ -1,7 +1,7 @@
 import { Strategy } from "passport-jwt"
 import { User } from "../models/user.model"
 import { Request } from "express"
-import { IPayload } from "../types/user.types"
+import { IPayload } from "../types/common.types"
 
 const cookieExtractor = (req: Request) => {
     let jwt = null 

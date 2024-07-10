@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import Joi from "joi"
 
 export interface MakeOrderRequest extends Request {
     params: {
@@ -10,8 +11,6 @@ export interface MakeOrderRequest extends Request {
     }
 }
 
-export interface IdRequest extends Request {
-    params: {
-        id: string
-    }
-}
+export const MakeOrderSchema = Joi.object({
+    amount: Joi.number().integer().min(1).required()
+})

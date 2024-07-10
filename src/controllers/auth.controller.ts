@@ -1,4 +1,5 @@
-import { CreateUserRequest, ITokens, LoginUserRequest, UpdateUserProfileRequest } from "../types/user.types"
+import { CreateUserRequest, LoginUserRequest } from "../types/user.types"
+import { IdRequest, ITokens } from "../types/common.types"
 import { CreateUserDto } from "../dto/user/user-create.dto"
 import { LoginUserDto } from "../dto/user/user-login.dto"
 import { AuthService } from "../services/auth.service"
