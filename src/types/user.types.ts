@@ -37,6 +37,12 @@ export interface LoginUserRequest extends Request {
     }
 }
 
+export enum Roles {
+    Admin = 3,
+    Seller = 2,
+    Customer = 1
+}
+
 export const CreateUserSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().alphanum().min(5).max(30).required(),

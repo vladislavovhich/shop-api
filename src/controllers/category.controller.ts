@@ -6,11 +6,12 @@ import { CategoryService } from '../services/category.service'
 import { CreateCategoryDto } from '../dto/category/category-create.dto'
 import { UpdateCategoryDto } from '../dto/category/category-update.dto'
 import { CategoryPropertyDto } from '../dto/category/category-property.dto'
+import { UserService } from '../services/user.service'
 
 export const CategoryController = {
     create: async (req: CreateRequest, res: Response) => {
         // #swagger.tags = ['Category']
-        
+
         const category = await CategoryService.create(new CreateCategoryDto({
             name: req.body.name
         }))

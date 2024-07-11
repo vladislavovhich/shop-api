@@ -5,10 +5,13 @@ import { ProductService } from "../services/product.service"
 import { CreateProductDto, IPropertyDto, PropertyDto } from "../dto/product/product-create.dto"
 import { UpdateProductDto } from "../dto/product/product-update.dto"
 import { IdRequest } from "../types/common.types"
+import { UserService } from "../services/user.service"
 
 export const ProductController = {
     create: async (req: CreateRequest, res: Response) => {
         // #swagger.tags = ['Product']
+
+        const user = await UserService.extractUserFromReq(req)
 
         const properties: IPropertyDto[] = req.body.properties.map(property => new PropertyDto({
             propertyId: property.propertyId,
@@ -20,7 +23,8 @@ export const ProductController = {
             name: req.body.name,
             categoryId: parseInt(req.body.categoryId),
             price: parseFloat(req.body.price),
-            properties
+            properties,
+            userId: user.id
         }))
 
         res.status(StatusCodes.OK).send({

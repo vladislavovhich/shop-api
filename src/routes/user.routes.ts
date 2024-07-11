@@ -6,11 +6,12 @@ import { CartController } from '../controllers/cart.controller'
 import { isValid } from '../middleware/validation.middleware'
 import { UpdateUserProfileSchema } from '../types/user.types'
 import { GetByIdSchema } from '../types/common.types'
+import { isAllowed } from '../middleware/check-role.middleware'
 
 const router: Router = express.Router()
 
 router.put("/profile", 
-    passport.authenticate('jwt', { session: false }), 
+    passport.authenticate('jwt', { session: false }),
     isValid(UpdateUserProfileSchema, "body"),
     UserController.updateProfile)
 

@@ -9,6 +9,7 @@ export interface ICreateProductDto {
     price: number
     categoryId: number
     properties: IPropertyDto[]
+    userId: number
 }
 
 export class PropertyDto implements IPropertyDto {
@@ -28,11 +29,13 @@ export class CreateProductDto implements ICreateProductDto {
     public price: number
     public categoryId: number
     public properties: IPropertyDto[]
+    public userId: number
 
     constructor(data: ICreateProductDto) {
         this.name = data.name
         this.price = data.price
         this.categoryId = data.categoryId
         this.properties = data.properties
+        this.userId = data.userId
     }
 }

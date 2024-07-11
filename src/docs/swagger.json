@@ -286,7 +286,7 @@
       }
     },
     "/api/categories/{categoryId}/add-property/{propertyId}": {
-      "put": {
+      "post": {
         "tags": [
           "Category"
         ],

@@ -3,8 +3,9 @@ import { sequelize } from "../config/db"
 import { Type } from './type.model'
 import { User } from './user.model'
 import { Product } from './product.model'
+import { IUserBelongsTo } from '../types/common.types'
 
-class Review extends Model {
+class Review extends Model implements IUserBelongsTo{
     declare id: number
     declare date: Date
     declare text: string

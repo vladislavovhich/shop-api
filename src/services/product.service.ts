@@ -6,6 +6,7 @@ import { Category } from "../models/category.model";
 import { UpdateProductDto } from "../dto/product/product-update.dto";
 import { ProductProperty } from "../models/product-property.model";
 import { Property } from "../models/property.model";
+import { UserService } from "./user.service";
 
 export const ProductService = {
     checkProperties: (category: Category, propertiesReceived: IPropertyDto[]) => {
@@ -39,7 +40,7 @@ export const ProductService = {
 
     create: async (createProductDto: CreateProductDto): Promise<Product> => {
         const category = await CategoryService.getCategoryProperties(createProductDto.categoryId)
-
+        const user = await UserService.findById(createProductDto.userId)
         const propertiesReceived = createProductDto.properties
 
         ProductService.checkProperties(category, propertiesReceived)
@@ -59,6 +60,7 @@ export const ProductService = {
             })
         }
 
+        await product.setUser(user)
         await product.reload({include: [Category, {model: ProductProperty, include: [Property]}]})
 
         return product

@@ -2,8 +2,9 @@ import { Model, DataTypes } from 'sequelize'
 import { sequelize } from "../config/db"
 import { Product } from './product.model'
 import { User } from './user.model'
+import { IUserBelongsTo } from '../types/common.types'
 
-class Order extends Model {
+class Order extends Model implements IUserBelongsTo {
     declare id: number
     declare amount: number
     declare date: Date

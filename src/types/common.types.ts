@@ -3,6 +3,10 @@ import { User as UserModel } from "../models/user.model"
 import { JwtPayload } from "jsonwebtoken"
 import Joi from "joi"
 
+export interface IUserBelongsTo {
+    userId: number
+}
+
 export interface IdRequest extends Request {
     params: {
         id: string
