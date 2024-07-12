@@ -55,10 +55,10 @@ export const CartController = {
         // #swagger.tags = ['User']
 
         const user = await UserService.extractUserFromReq(req)
-        const userCart = await CartService.getUserProducts(user.id)
+        const cartProducts = await CartService.getUserProducts(user.id)
 
         res.status(StatusCodes.OK).send({
-            userCart
+            cartProducts
         })
     }
 }

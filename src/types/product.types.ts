@@ -2,6 +2,11 @@ import { Request } from 'express';
 import { IPropertyDto } from '../dto/product/product-create.dto';
 import Joi from 'joi';
 
+export interface ICartProduct {
+    productId: number,
+    userId: number
+}
+
 export interface CreateRequest extends Request {
     body: {
         name: string,

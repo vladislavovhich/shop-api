@@ -15,7 +15,9 @@ export const UserService = {
     },
 
     findByEmail: async (email: string): Promise<User | null> => {
-        const user = await User.findOne({where: {email}})
+        const user = await User.findOne({
+            where: {email},
+        })
 
         return user
     },

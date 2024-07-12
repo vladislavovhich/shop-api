@@ -7,6 +7,7 @@ import { CartOperationDto } from "../dto/cart/cart-operation.dto";
 import { BadRequest } from "@tsed/exceptions";
 import { Property } from "../models/property.model";
 import { ProductProperty } from "../models/product-property.model";
+import { ICartProduct } from "../types/product.types";
 
 export const CartService = {
     addProductToCart: async (cartOperationDto: CartOperationDto): Promise<User> => {
@@ -49,21 +50,24 @@ export const CartService = {
         return user
     },
 
-    getUserProducts: async (userId: number): Promise<User> => {
+    belongsToUser: async (userId: number, productId: number): Promise<boolean> => {
+        const user = await UserService.findById(userId)
+        const product = await ProductService.get(productId)
+        const hasProduct = await user.hasCartProduct(product)
+
+        return hasProduct
+    },
+
+    getUserProducts: async (userId: number): Promise<Product[]> => {
+        const user = await UserService.findById(userId)
+        const cartProducts = await user.getCartProducts()
+
+        return cartProducts
+    },
+
+    getOneUserProducts: async (productId: number, userId: number): Promise<Product[]> => {
         const user = await UserService.findById(userId)
 
-        await user.reload({
-            include: [
-                { 
-                    model: Product, 
-                    as: 'cartProducts', 
-                    include: [
-                        {model: ProductProperty, include: [Property]}
-                    ]
-                }
-            ]
-        })
-
-        return user
+        return await user.getCartProducts()
     }
 }

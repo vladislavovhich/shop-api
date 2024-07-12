@@ -14,6 +14,7 @@ import { Roles } from '../types/user.types'
 import { ownsResource } from '../middleware/owns-resource.middleware'
 import { ProductService } from '../services/product.service'
 import { ReviewService } from '../services/review.service'
+import { CartService } from '../services/cart.service'
 
 const router: Router = express.Router()
 
@@ -30,7 +31,7 @@ router.put("/:id",
     isAllowed([Roles.Admin, Roles.Seller]),
     isValid(GetByIdSchema, "params"),
     isValid(CreateProductSchema, "body"),
-    ownsResource(ProductService.get, true),
+    ownsResource(ProductService.belongsToSeller, true),
     ProductController.update)
 
 router.post("/", 
@@ -43,7 +44,7 @@ router.delete("/:id",
     passport.authenticate('jwt', { session: false }),
     isAllowed([Roles.Admin, Roles.Seller]),
     isValid(GetByIdSchema, "params"),
-    ownsResource(ProductService.get, true),
+    ownsResource(ProductService.belongsToSeller, true),
     ProductController.delete)
 
 // product reviews routes
@@ -58,13 +59,13 @@ router.put("/:productId/reviews/:reviewId",
     passport.authenticate('jwt', { session: false }),
     isValid(ReviewIdReqSchema, "params"),
     isValid(ReviewReqSchema, "body"),
-    ownsResource(ReviewService.get, true, "reviewId"),
+    ownsResource(ReviewService.belongsToUser, true, "reviewId"),
     ReviewController.updateReview)
 
 router.delete("/:productId/reviews/:reviewId", 
     passport.authenticate('jwt', { session: false }), 
     isValid(ReviewIdReqSchema, "params"),
-    ownsResource(ReviewService.get, true, "reviewId"),
+    ownsResource(ReviewService.belongsToUser, true, "reviewId"),
     ReviewController.deleteReview)
 
 router.get("/:id/reviews",  
@@ -90,7 +91,6 @@ router.delete("/:id/cart-remove",
     passport.authenticate('jwt', { session: false }), 
     isAllowed([Roles.Customer]),
     isValid(GetByIdSchema, "params"),
-    ownsResource(ProductService.get, true),
     CartController.removeFromCart)
 
 export { router as ProductRouter }

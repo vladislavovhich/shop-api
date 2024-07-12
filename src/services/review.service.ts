@@ -24,6 +24,14 @@ export const ReviewService = {
         return review
     },
 
+    belongsToUser: async (userId: number, reviewId: number): Promise<boolean> => {
+        const user = await UserService.findById(userId)
+        const review = await ReviewService.get(reviewId)
+        const hasReview = await user.hasReview(review)
+
+        return hasReview
+    },
+
     update: async (updateReviewDto: UpdateReviewDto): Promise<Review> => {
         const review = await ReviewService.get(updateReviewDto.reviewId)
 

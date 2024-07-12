@@ -6,6 +6,8 @@ import { AuthService } from "../services/auth.service"
 import { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import { User } from "../models/user.model"
+import { UserService } from "../services/user.service"
+import { BadRequest } from "@tsed/exceptions"
 
 export const AuthController = {
     register: async (req: CreateUserRequest , res: Response) => {
@@ -33,22 +35,19 @@ export const AuthController = {
         })
 
         const result = await AuthService.login(loginUserDto)
-
+        
         res.cookie("jwt", result.token, {httpOnly: true, secure: true})
-
         res.status(StatusCodes.OK).send({user: result.user})
     },
 
     refreshToken: async (req: Request, res: Response) => {
         // #swagger.tags = ['Auth']
 
-        const user = (await req.user) as User
+        const user = await UserService.extractUserFromReq(req)
 
         await AuthService.refreshToken(user.token, (result: ITokens) => {
             if (!result) {
-                return res.status(StatusCodes.BAD_REQUEST).json({
-                    message: 'No refresh token specified'
-                })
+                throw new BadRequest("No token specified")
             }
 
             res.cookie("jwt", result.accessToken, {httpOnly: true, secure: true})
@@ -60,7 +59,6 @@ export const AuthController = {
         // #swagger.tags = ['Auth']
 
         res.clearCookie('jwt')
-
         res.sendStatus(StatusCodes.OK)
     }
 }

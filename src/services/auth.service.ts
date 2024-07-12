@@ -31,6 +31,7 @@ export const AuthService = {
             name: createUserDto.name,
             birthDate: createUserDto.birthDate
         })
+
         const accessToken = await AuthService.getAccessToken(user.id)
         const refreshToken = await AuthService.getRefreshToken(user.id)
 
@@ -76,7 +77,7 @@ export const AuthService = {
             }
 
             const payload = res as IPayload
-            const user = await User.findByPk(payload.id)
+            const user = await UserService.findById(payload.id)
 
             if (!user) {
                 throw new NotFound("User not found")

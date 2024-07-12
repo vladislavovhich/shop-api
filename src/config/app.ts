@@ -13,7 +13,7 @@ import { exceptionHandler } from "../middleware/exception-handler.middleware"
 import { UserRouter } from "../routes/user.routes"
 import swaggerUIPath from "swagger-ui-express"
 import { AuthRouter } from "../routes/auth.routes"
-
+import { Request, Response } from "express"
 const swaggerJson = require("../docs/swagger.json")
 export const app: Application = express()
 
@@ -23,7 +23,6 @@ app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(passport.initialize())
 
 app.use("/api/properties", PropertyRouter)
@@ -32,4 +31,5 @@ app.use("/api/products", ProductRouter)
 app.use("/api/users", UserRouter)
 app.use("/api/auth", AuthRouter)
 app.use('/api/docs', swaggerUIPath.serve, swaggerUIPath.setup(swaggerJson))
+
 app.use(exceptionHandler)   

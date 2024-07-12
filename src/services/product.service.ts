@@ -104,6 +104,14 @@ export const ProductService = {
         return product
     },
 
+    belongsToSeller: async (userId: number, productId: number): Promise<boolean> => {
+        const user = await UserService.findById(userId)
+        const product = await ProductService.get(productId)
+        const hasProduct = await user.hasSellerProduct(product)
+
+        return hasProduct
+    },
+
     delete: async (id: number): Promise<void> => {
         const product = await ProductService.get(id)
 
