@@ -1,6 +1,7 @@
 import { Request } from "express"
 import { User as UserModel } from "../models/user.model"
 import { JwtPayload } from "jsonwebtoken"
+import { Image } from "../models/image.model"
 import Joi from "joi"
 
 export interface IUserBelongsTo {

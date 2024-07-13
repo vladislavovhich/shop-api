@@ -7,11 +7,13 @@ import { isValid } from '../middleware/validation.middleware'
 import { UpdateUserProfileSchema } from '../types/user.types'
 import { GetByIdSchema } from '../types/common.types'
 import { isAllowed } from '../middleware/check-role.middleware'
+import { upload } from '../config/multer'
 
 const router: Router = express.Router()
 
 router.put("/profile", 
     passport.authenticate('jwt', { session: false }),
+    upload.single('image'),
     isValid(UpdateUserProfileSchema, "body"),
     UserController.updateProfile)
 

@@ -8,8 +8,6 @@ import { UserService } from "../services/user.service"
 
 export const OrderController = {
     makeOrder: async (req: MakeOrderRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         const user = await UserService.extractUserFromReq(req)
 
         const order = await OrderService.makeOrder(new OrderMakeDto({
@@ -25,8 +23,6 @@ export const OrderController = {
     },
 
     userOrders: async (req: IdRequest, res: Response) => {
-        // #swagger.tags = ['User']
-
         const userId = parseInt(req.params.id)
         const orders = await OrderService.ordersByUser(userId)
 
@@ -36,8 +32,6 @@ export const OrderController = {
     },
 
     getMyOrders: async (req: Request, res: Response) => {
-        // #swagger.tags = ['User']
-
         const user = await UserService.extractUserFromReq(req)
 
         const orders = await OrderService.ordersByUser(user.id)

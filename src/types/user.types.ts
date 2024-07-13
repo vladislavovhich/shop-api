@@ -20,7 +20,9 @@ export interface CreateUserRequest extends Request {
         roleId: string,
         name: string,
         birthDate: string
-    }
+    },
+
+    file?: Express.Multer.File
 }
 
 export interface UpdateUserProfileRequest extends Request {

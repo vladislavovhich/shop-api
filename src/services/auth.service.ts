@@ -8,6 +8,7 @@ import { User } from "../models/user.model"
 import { Role } from "../models/role.model"
 import { BadRequest, NotFound } from "@tsed/exceptions"
 import { UserService } from "./user.service"
+import { ImageService } from "./image.service"
 
 export const AuthService = {
     register: async (createUserDto: ICreateUserDto): Promise<IRegisterResult> => {
@@ -31,6 +32,12 @@ export const AuthService = {
             name: createUserDto.name,
             birthDate: createUserDto.birthDate
         })
+
+        if (createUserDto.profilePicture) {
+            const image = await ImageService.upload(createUserDto.profilePicture)
+
+            await user.addImage(image)
+        }
 
         const accessToken = await AuthService.getAccessToken(user.id)
         const refreshToken = await AuthService.getRefreshToken(user.id)

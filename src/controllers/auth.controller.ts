@@ -5,30 +5,26 @@ import { LoginUserDto } from "../dto/user/user-login.dto"
 import { AuthService } from "../services/auth.service"
 import { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
-import { User } from "../models/user.model"
 import { UserService } from "../services/user.service"
 import { BadRequest } from "@tsed/exceptions"
-
 export const AuthController = {
     register: async (req: CreateUserRequest , res: Response) => {
-        // #swagger.tags = ['Auth']
-
+        const file = req.file
+        
         const {user, tokens} = await AuthService.register(new CreateUserDto({
             email: req.body.email,
             password: req.body.password,
             roleId: parseInt(req.body.roleId),
             name: req.body.name,
-            birthDate: new Date(req.body.birthDate)
+            birthDate: new Date(req.body.birthDate),
+            profilePicture: file?.path
         }))
 
         res.cookie("jwt", tokens.accessToken, {httpOnly: true, secure: true})
         res.status(StatusCodes.OK).send({ user })
     },
 
-
     login: async (req: LoginUserRequest, res: Response) => {
-        // #swagger.tags = ['Auth']
-
         const loginUserDto = new LoginUserDto({
             email: req.body.email, 
             password: req.body.password
@@ -41,8 +37,6 @@ export const AuthController = {
     },
 
     refreshToken: async (req: Request, res: Response) => {
-        // #swagger.tags = ['Auth']
-
         const user = await UserService.extractUserFromReq(req)
 
         await AuthService.refreshToken(user.token, (result: ITokens) => {
@@ -56,8 +50,6 @@ export const AuthController = {
     },
 
     logout: async (req: Request, res: Response) => {
-        // #swagger.tags = ['Auth']
-
         res.clearCookie('jwt')
         res.sendStatus(StatusCodes.OK)
     }

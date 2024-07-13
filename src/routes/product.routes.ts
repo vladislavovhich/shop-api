@@ -14,7 +14,7 @@ import { Roles } from '../types/user.types'
 import { ownsResource } from '../middleware/owns-resource.middleware'
 import { ProductService } from '../services/product.service'
 import { ReviewService } from '../services/review.service'
-import { CartService } from '../services/cart.service'
+import { upload } from '../config/multer'
 
 const router: Router = express.Router()
 
@@ -28,6 +28,7 @@ router.get("/", ProductController.getAll)
 
 router.put("/:id", 
     passport.authenticate('jwt', { session: false }), 
+    upload.single('image'),
     isAllowed([Roles.Admin, Roles.Seller]),
     isValid(GetByIdSchema, "params"),
     isValid(CreateProductSchema, "body"),
@@ -36,6 +37,7 @@ router.put("/:id",
 
 router.post("/", 
     passport.authenticate('jwt', { session: false }), 
+    upload.single('image'),
     isAllowed([Roles.Admin, Roles.Seller]),
     isValid(CreateProductSchema, "body"),
     ProductController.create)

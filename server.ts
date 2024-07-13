@@ -9,6 +9,7 @@ import { User } from "./src/models/user.model"
 import { app } from "./src/config/app"
 import { Order } from "./src/models/order.model"
 import { Review } from "./src/models/review.model"
+import { Image } from "./src/models/image.model"
 import "dotenv/config"
 
 const PORT = process.env.PORT || 8080
@@ -23,7 +24,7 @@ sequelize.sync({ force: false }).then(async () => {
     await User.sync({force: false})
     await Order.sync({force: false})
     await Review.sync({force: false})
-
+    await Image.sync({force: false})
 
     const types: number = await Type.count()
 

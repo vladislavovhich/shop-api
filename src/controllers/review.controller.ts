@@ -11,8 +11,6 @@ import { IdRequest } from "../types/common.types"
 
 export const ReviewController = {
     writeReview: async (req: CreateRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         const user = await UserService.extractUserFromReq(req)
 
         const review = await ReviewService.create(new CreateReviewDto({
@@ -29,8 +27,6 @@ export const ReviewController = {
     },
 
     updateReview: async (req: UpdateRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         const user = await UserService.extractUserFromReq(req)
 
         const review = await ReviewService.update(new UpdateReviewDto({
@@ -46,8 +42,6 @@ export const ReviewController = {
     },
 
     deleteReview: async (req: ReviewIdRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         await ReviewService.delete(new ReviewEditDto({
             reviewId: parseInt(req.params.reviewId),
             productId: parseInt(req.params.productId)
@@ -57,8 +51,6 @@ export const ReviewController = {
     },
 
     getProductReviews: async (req: IdRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         const reviews = await ReviewService.getProductReviews(parseInt(req.params.id))
 
         res.status(StatusCodes.OK).send({reviews})

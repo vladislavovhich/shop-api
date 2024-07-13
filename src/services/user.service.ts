@@ -2,6 +2,8 @@ import { Request } from "express"
 import { User } from "../models/user.model"
 import { BadRequest, NotFound } from "@tsed/exceptions"
 import { UpdateProfileDto } from "../dto/user/user-update-profile.dto"
+import { Image } from "../models/image.model"
+import { ImageService } from "./image.service"
 
 export const UserService = {
     extractUserFromReq: async (req: Request): Promise<User> => {
@@ -23,7 +25,9 @@ export const UserService = {
     },
 
     findById: async (id: number): Promise<User> => {
-        const user = await User.findByPk(id)
+        const user = await User.findByPk(id, {
+            include: [Image]
+        })
 
         if (!user) {
             throw new NotFound("User not found")
@@ -43,6 +47,12 @@ export const UserService = {
             name: updateProfileDto.name,
             birthDate: updateProfileDto.birthDate
         })
+
+        if (updateProfileDto.profilePicture) {
+            const image = await ImageService.upload(updateProfileDto.profilePicture)
+
+            await user.addImage(image)
+        }
 
         return user
     }

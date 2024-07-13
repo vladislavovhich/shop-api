@@ -4,6 +4,7 @@ import { Type } from './type.model'
 import { User } from './user.model'
 import { Product } from './product.model'
 import { IUserBelongsTo } from '../types/common.types'
+import { Image } from './image.model'
 
 class Review extends Model implements IUserBelongsTo{
     declare id: number
@@ -41,7 +42,13 @@ Review.init({
 User.hasMany(Review)
 Review.belongsTo(User)
 
-Product.hasMany(Review)
-Review.belongsTo(Product)
+Review.hasMany(Image, {
+    foreignKey: 'itemId',
+    constraints: false,
+    scope: {
+        itemType: 'review',
+    },
+})
+Image.belongsTo(Review, { foreignKey: 'itemId', constraints: false });
 
 export { Review }

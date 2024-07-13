@@ -5,6 +5,7 @@ import { ProductProperty } from './product-property.model'
 import { User } from './user.model'
 import { Review } from './review.model'
 import { IUserBelongsTo } from '../types/common.types'
+import { Image } from './image.model'
 
 class Product extends Model implements IUserBelongsTo {
     declare id: number
@@ -17,6 +18,8 @@ class Product extends Model implements IUserBelongsTo {
     declare getProductProperties: () => Promise<ProductProperty[]>
     declare getReviews: () => Promise<Review[]>
     declare hasReview: (review: Review) => Promise<boolean>
+    declare addImage: (image: Image) => Promise<void>
+    declare getImages: () => Promise<Image[]>
 }
 
 Product.init({
@@ -42,5 +45,17 @@ User.belongsToMany(Product, { through: 'carts', as: "cartProducts"})
 
 User.hasMany(Product, { as: 'SellerProducts' })
 Product.belongsTo(User)
+
+Product.hasMany(Image, {
+    foreignKey: 'itemId',
+    constraints: false,
+    scope: {
+        itemType: 'product',
+    },
+})
+Image.belongsTo(Product, { foreignKey: 'itemId', constraints: false });
+
+Product.hasMany(Review)
+Review.belongsTo(Product)
 
 export { Product }

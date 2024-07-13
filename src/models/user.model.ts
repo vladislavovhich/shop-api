@@ -4,6 +4,7 @@ import { Role } from './role.model'
 import { Product } from './product.model'
 import { Order } from './order.model'
 import { Review } from './review.model'
+import { Image } from './image.model'
 
 class User extends Model {
     declare id: number
@@ -23,6 +24,8 @@ class User extends Model {
     declare hasSellerProduct: (product: Product | number) => Promise<boolean>
     declare removeCartProduct: (product: Product | number) => Promise<void>
     declare getCartProducts: () => Promise<Product[]>
+    declare addImage: (image: Image) => Promise<void>
+    declare getImages: () => Promise<Image[]>
 }
 
 User.init(

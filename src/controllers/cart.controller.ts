@@ -7,8 +7,6 @@ import { StatusCodes } from "http-status-codes"
 
 export const CartController = {
     addToCart: async (req: IdRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         let user = await UserService.extractUserFromReq(req)
 
         const userId = user.id
@@ -24,8 +22,6 @@ export const CartController = {
     },
 
     removeFromCart: async (req: IdRequest, res: Response) => {
-        // #swagger.tags = ['Product']
-
         let user = await UserService.extractUserFromReq(req)
 
         const userId = user.id
@@ -41,8 +37,6 @@ export const CartController = {
     },
 
     getUserCart: async (req: IdRequest, res: Response) => {
-        // #swagger.tags = ['User']
-
         const userId = parseInt(req.params.id)
         const userCart = await CartService.getUserProducts(userId)
 
@@ -52,8 +46,6 @@ export const CartController = {
     },
 
     getMyCart: async (req: Request, res: Response) => {
-        // #swagger.tags = ['User']
-
         const user = await UserService.extractUserFromReq(req)
         const cartProducts = await CartService.getUserProducts(user.id)
 
