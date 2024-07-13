@@ -6,7 +6,7 @@ import passport from 'passport'
 import { CartController } from '../controllers/cart.controller'
 import { ReviewController } from '../controllers/review.controller'
 import { isValid } from '../middleware/validation.middleware'
-import { CreateProductSchema } from '../types/product.types'
+import { CreateProductSchema, GetProductsSchema } from '../types/product.types'
 import { CreateReviewParamsSchema, ReviewIdReqSchema, ReviewReqSchema } from '../types/review.types'
 import { MakeOrderSchema } from '../types/order.types'
 import { isAllowed, isAdmin } from '../middleware/check-role.middleware'
@@ -24,7 +24,9 @@ router.get("/:id",
     isValid(GetByIdSchema, "params"),
     ProductController.get)
 
-router.get("/", ProductController.getAll)
+router.get("/", 
+    isValid(GetProductsSchema, "query"),
+    ProductController.getAll)
 
 router.put("/:id", 
     passport.authenticate('jwt', { session: false }), 
@@ -53,12 +55,14 @@ router.delete("/:id",
 
 router.post("/:productId/reviews", 
     passport.authenticate('jwt', { session: false }), 
+    upload.array('images', 10),
     isValid(CreateReviewParamsSchema, "params"),
     isValid(ReviewReqSchema, "body"),
     ReviewController.writeReview)
 
 router.put("/:productId/reviews/:reviewId", 
     passport.authenticate('jwt', { session: false }),
+    upload.array('images', 10),
     isValid(ReviewIdReqSchema, "params"),
     isValid(ReviewReqSchema, "body"),
     ownsResource(ReviewService.belongsToUser, true, "reviewId"),

@@ -18,6 +18,8 @@ class Review extends Model implements IUserBelongsTo{
     declare setType: (type: Type) => Promise<Type | null>
     declare setUser: (user: User) => Promise<void>
     declare setProduct: (product: Product) => Promise<void>
+    declare addImage: (image: Image) => Promise<void>
+    declare getImages: () => Promise<Image[]>
 }
 
 Review.init({

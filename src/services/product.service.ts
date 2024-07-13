@@ -7,12 +7,16 @@ import { UpdateProductDto } from "../dto/product/product-update.dto";
 import { ProductProperty } from "../models/product-property.model";
 import { Property } from "../models/property.model";
 import { UserService } from "./user.service";
+import { IProductGetDto } from "../dto/product/product-get.dto";
+import { Image } from "../models/image.model";
+import { ImageService } from "./image.service";
+import { IGetAllResult } from "../types/product.types";
+import { Op } from "sequelize";
 
 export const ProductService = {
     checkProperties: (category: Category, propertiesReceived: IPropertyDto[]) => {
         const properties = category.properties
-
-        let isValid = properties.every(property => propertiesReceived.some(prop => prop.propertyId == property.id))
+        const isValid = properties.every(property => propertiesReceived.some(prop => prop.propertyId == property.id))
 
         if (!isValid) {
             throw new BadRequest(
@@ -60,8 +64,14 @@ export const ProductService = {
             })
         }
 
+        if (createProductDto.productCover) {
+            const image = await ImageService.upload(createProductDto.productCover)
+
+            await product.addImage(image)
+        }
+
         await product.setUser(user)
-        await product.reload({include: [Category, {model: ProductProperty, include: [Property]}]})
+        await product.reload({include: [Category, Image, {model: ProductProperty, include: [Property]}]})
 
         return product
     },
@@ -99,7 +109,13 @@ export const ProductService = {
             }
         }
 
-       await product.reload({include: [Category, {model: ProductProperty, include: [Property]}]})
+        if (updateProductDto.productCover) {
+            const image = await ImageService.upload(updateProductDto.productCover)
+
+            await product.addImage(image)
+        }
+
+        await product.reload({include: [Category, Image, {model: ProductProperty, include: [Property]}]})
 
         return product
     },
@@ -118,10 +134,34 @@ export const ProductService = {
         await product.destroy()
     },
 
-    getAll: async (): Promise<Product[]> => {
-        const products = await Product.findAll({include: [Category, {model: ProductProperty, include: [Property]}]})
+    getAll: async (productGetDto: IProductGetDto): Promise<IGetAllResult> => {
+        const amount = await Product.count()
+        const page = productGetDto.page
+        const pageSize = productGetDto.pageSize
+        const hasNextPage = (amount - page * pageSize) > 0
+        const hasPrevPage = page > 1
 
-        return products
+        const whereFields = productGetDto.filterFields.map(field => [field[0], { [Op.like]: `%${field[1]}%`}])
+
+        const products = await Product.findAll({
+            include: [Category, {model: ProductProperty, include: [Property]}, Image],
+            order: productGetDto.sortFields as any,
+            limit: productGetDto.pageSize,
+            offset: productGetDto.offset,
+            where: Object.fromEntries(whereFields) as any
+        })
+
+        const result: IGetAllResult = {products}
+
+        if (hasNextPage) {
+            result.nextPage = page + 1
+        }
+
+        if (hasPrevPage) {
+            result.prevPage = page - 1
+        }
+
+        return result
     },
 
     get: async (id: number): Promise<Product> => {

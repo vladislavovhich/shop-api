@@ -10,6 +10,7 @@ export interface ICreateProductDto {
     categoryId: number
     properties: IPropertyDto[]
     userId: number
+    productCover?: string
 }
 
 export class PropertyDto implements IPropertyDto {
@@ -30,6 +31,7 @@ export class CreateProductDto implements ICreateProductDto {
     public categoryId: number
     public properties: IPropertyDto[]
     public userId: number
+    public productCover?: string | undefined
 
     constructor(data: ICreateProductDto) {
         this.name = data.name
@@ -37,5 +39,6 @@ export class CreateProductDto implements ICreateProductDto {
         this.categoryId = data.categoryId
         this.properties = data.properties
         this.userId = data.userId
+        this.productCover = data.productCover
     }
 }

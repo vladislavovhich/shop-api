@@ -12,15 +12,18 @@ import { IdRequest } from "../types/common.types"
 export const ReviewController = {
     writeReview: async (req: CreateRequest, res: Response) => {
         const user = await UserService.extractUserFromReq(req)
-
+        const files = req.files as Express.Multer.File[]
+        
         const review = await ReviewService.create(new CreateReviewDto({
             rating: parseInt(req.body.rating),
             text: req.body.text,
             productId: parseInt(req.params.productId),
             userId: user.id,
-            date: new Date()
+            date: new Date(),
+            images: files?.map(file => file.path)
         }))
 
+        console.log(req.files)
         res.status(StatusCodes.OK).send({
             review
         })
@@ -28,12 +31,14 @@ export const ReviewController = {
 
     updateReview: async (req: UpdateRequest, res: Response) => {
         const user = await UserService.extractUserFromReq(req)
+        const files = req.files as Express.Multer.File[]
 
         const review = await ReviewService.update(new UpdateReviewDto({
             rating: parseInt(req.body.rating),
             text: req.body.text,
             reviewId: parseInt(req.params.reviewId),
             userId: user.id,
+            images: files?.map(file => file.path)
         }))
 
         res.status(StatusCodes.OK).send({

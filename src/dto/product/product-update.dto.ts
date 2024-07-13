@@ -6,6 +6,7 @@ interface IUpdateProductDto {
     price: number
     categoryId: number
     properties: IPropertyDto[]
+    productCover?: string
 }
 
 class UpdateProductDto implements IUpdateProductDto {
@@ -14,6 +15,7 @@ class UpdateProductDto implements IUpdateProductDto {
     public price: number
     public categoryId: number
     public properties: IPropertyDto[]
+    public productCover?: string | undefined
 
     constructor(data: IUpdateProductDto) {
         this.id = data.id
@@ -21,6 +23,7 @@ class UpdateProductDto implements IUpdateProductDto {
         this.price = data.price
         this.categoryId = data.categoryId
         this.properties = data.properties
+        this.productCover = data.productCover
     }
 }
 

@@ -7,6 +7,7 @@ import { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import { UserService } from "../services/user.service"
 import { BadRequest } from "@tsed/exceptions"
+
 export const AuthController = {
     register: async (req: CreateUserRequest , res: Response) => {
         const file = req.file

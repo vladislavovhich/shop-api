@@ -4,8 +4,10 @@ import { Review } from "../models/review.model";
 import { ProductService } from "./product.service";
 import { UserService } from "./user.service";
 import { UpdateReviewDto } from "../dto/review/review-update.dto";
-import { Product } from "../models/product.model";
+import { ImageService } from "./image.service";
 import { IReviewEditDto } from "../dto/review/review-edit.dto";
+import { User } from "../models/user.model";
+import { Image } from "../models/image.model";
 
 export const ReviewService = {
     create: async (createReviewDto: CreateReviewDto): Promise<Review> => {
@@ -18,8 +20,18 @@ export const ReviewService = {
             rating: createReviewDto.rating
         })
 
+        if (createReviewDto.images) {
+            for (let imageUrl of createReviewDto.images) {
+                const image = await ImageService.upload(imageUrl)
+
+                await review.addImage(image)
+            }
+        }
+
         await review.setUser(user)
         await review.setProduct(product)
+
+        await review.reload({include: [User, Image]})
 
         return review
     },
@@ -40,6 +52,16 @@ export const ReviewService = {
             text: updateReviewDto.text
         })
 
+        if (updateReviewDto.images) {
+            for (let imageUrl of updateReviewDto.images) {
+                const image = await ImageService.upload(imageUrl)
+
+                await review.addImage(image)
+            }
+        }
+
+        await review.reload({include: [User, Image]})
+
         return review
     },
 
@@ -56,7 +78,9 @@ export const ReviewService = {
     },
 
     get: async (id: number): Promise<Review> => {
-        const review = await Review.findByPk(id)
+        const review = await Review.findByPk(id, {
+            include: [User, Image]
+        })
 
         if (!review) {
             throw new BadRequest("Review not found")

@@ -20,6 +20,7 @@ class Product extends Model implements IUserBelongsTo {
     declare hasReview: (review: Review) => Promise<boolean>
     declare addImage: (image: Image) => Promise<void>
     declare getImages: () => Promise<Image[]>
+    declare rating?: number
 }
 
 Product.init({
@@ -31,6 +32,20 @@ Product.init({
         type: DataTypes.DOUBLE,
         allowNull: false,
     },
+    rating: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            const reviews = await this.getReviews()
+
+            if (reviews && reviews.length > 0) {
+                const sum = reviews.reduce((acc, review) => acc + review.rating, 0)
+
+                return sum / reviews.length
+            }
+
+            return 0
+        },
+      },
 }, {
     sequelize,
     modelName: 'product',

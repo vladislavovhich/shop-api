@@ -4,6 +4,7 @@ export interface ICreateReviewDto {
     date: Date
     userId: number
     productId: number
+    images?: string[]
 }
 
 export class CreateReviewDto implements ICreateReviewDto {
@@ -12,6 +13,7 @@ export class CreateReviewDto implements ICreateReviewDto {
     public date: Date
     public userId: number
     public productId: number
+    public images?: string[] | undefined
 
     constructor(data: ICreateReviewDto) {
         this.rating = data.rating
@@ -19,5 +21,6 @@ export class CreateReviewDto implements ICreateReviewDto {
         this.date = data.date
         this.userId = data.userId
         this.productId = data.productId
+        this.images = data.images
     }
 }
