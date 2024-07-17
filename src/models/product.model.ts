@@ -12,6 +12,7 @@ class Product extends Model implements IUserBelongsTo {
     declare name: string
     declare price: number
     declare userId: number
+    declare reviews?: Review[]
 
     declare setUser: (user: User | number) => Promise<void>
     declare setCategory: (category: Category) => Promise<Category | null>
@@ -20,7 +21,6 @@ class Product extends Model implements IUserBelongsTo {
     declare hasReview: (review: Review) => Promise<boolean>
     declare addImage: (image: Image) => Promise<void>
     declare getImages: () => Promise<Image[]>
-    declare rating?: number
 }
 
 Product.init({
@@ -31,21 +31,7 @@ Product.init({
     price: {
         type: DataTypes.DOUBLE,
         allowNull: false,
-    },
-    rating: {
-        type: DataTypes.VIRTUAL,
-        get() {
-            const reviews = await this.getReviews()
-
-            if (reviews && reviews.length > 0) {
-                const sum = reviews.reduce((acc, review) => acc + review.rating, 0)
-
-                return sum / reviews.length
-            }
-
-            return 0
-        },
-      },
+    }
 }, {
     sequelize,
     modelName: 'product',
@@ -70,7 +56,7 @@ Product.hasMany(Image, {
 })
 Image.belongsTo(Product, { foreignKey: 'itemId', constraints: false });
 
-Product.hasMany(Review)
-Review.belongsTo(Product)
+Product.hasMany(Review, {as: "reviews", foreignKey: "productId"})
+Review.belongsTo(Product, {foreignKey: "productId"})
 
 export { Product }

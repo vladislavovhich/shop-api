@@ -2,20 +2,15 @@ import { Request, Response } from "express"
 import { MakeOrderRequest } from "../types/order.types"
 import { IdRequest } from "../types/common.types"
 import { OrderService } from "../services/order.service"
-import { OrderMakeDto } from "../dto/order/order-make.dto"
 import { StatusCodes } from "http-status-codes"
 import { UserService } from "../services/user.service"
+import { OrderDtoMapper } from "../mappers/order.mapper"
 
 export const OrderController = {
     makeOrder: async (req: MakeOrderRequest, res: Response) => {
         const user = await UserService.extractUserFromReq(req)
-
-        const order = await OrderService.makeOrder(new OrderMakeDto({
-            date: new Date(),
-            amount: parseInt(req.body.amount),
-            productId: parseInt(req.params.id),
-            userId: user.id
-        }))
+        const makeOrderDto = OrderDtoMapper.mapCreateDto(req, user)
+        const order = await OrderService.makeOrder(makeOrderDto)
 
         res.status(StatusCodes.OK).send({
             order

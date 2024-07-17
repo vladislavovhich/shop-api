@@ -1,6 +1,7 @@
+import { Literal } from "sequelize/types/utils";
 import { IPaginationDto, PaginationDto } from "../common/pagination.dto";
 
-export type Fields = [string, string | undefined][]
+export type Fields = [string | Literal, string | undefined][]
 
 export interface ISortField {
     fieldName: string

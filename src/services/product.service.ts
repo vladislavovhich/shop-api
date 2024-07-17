@@ -11,7 +11,9 @@ import { IProductGetDto } from "../dto/product/product-get.dto";
 import { Image } from "../models/image.model";
 import { ImageService } from "./image.service";
 import { IGetAllResult } from "../types/product.types";
-import { Op } from "sequelize";
+import { Op, fn, col, Sequelize } from "sequelize";
+import { Review } from "../models/review.model";
+import { sequelize } from "../config/db";
 
 export const ProductService = {
     checkProperties: (category: Category, propertiesReceived: IPropertyDto[]) => {
@@ -135,20 +137,52 @@ export const ProductService = {
     },
 
     getAll: async (productGetDto: IProductGetDto): Promise<IGetAllResult> => {
+        const keys = await Product.findAll({
+            attributes: ['id'],
+            limit: productGetDto.pageSize,
+            offset: productGetDto.offset,
+            subQuery: false,
+        })
         const amount = await Product.count()
         const page = productGetDto.page
         const pageSize = productGetDto.pageSize
         const hasNextPage = (amount - page * pageSize) > 0
-        const hasPrevPage = page > 1
-
+        const hasPrevPage = keys.length && page > 1
         const whereFields = productGetDto.filterFields.map(field => [field[0], { [Op.like]: `%${field[1]}%`}])
 
+
         const products = await Product.findAll({
-            include: [Category, {model: ProductProperty, include: [Property]}, Image],
+            where: {
+                id: keys.map(key => key.id),
+                ...Object.fromEntries(whereFields)
+            },
+            attributes: {
+                include: [
+                  [
+                    sequelize.fn('AVG', sequelize.col('reviews.rating')), 'rating'
+                  ]
+                ]
+            },
+             
+            include: [
+                Category, 
+                {model: ProductProperty, include: [Property]}, 
+                Image,
+                {
+                    model: Review,
+                    as: 'reviews',
+                    attributes: [],
+                    required: false
+                },
+            ],
             order: productGetDto.sortFields as any,
-            limit: productGetDto.pageSize,
-            offset: productGetDto.offset,
-            where: Object.fromEntries(whereFields) as any
+            group: [
+                'product.id', 
+                'category.id', 
+                'productProperties.id', 
+                'productProperties->property.id', 
+                'images.id'
+              ],
         })
 
         const result: IGetAllResult = {products}
@@ -165,7 +199,20 @@ export const ProductService = {
     },
 
     get: async (id: number): Promise<Product> => {
-        const product = await Product.findByPk(id, {include: [Category, {model: ProductProperty, include: [Property]}]})
+        const product = await Product.findByPk(id, 
+            {
+                include: [
+                    Category, 
+                    {model: ProductProperty, include: [Property]
+
+                    },
+                    {
+                        model: Review,
+                        as: 'reviews',
+                        attributes: ['rating'],
+                    },
+                ]
+            })
 
         if (!product) {
             throw new NotFound("Product not found")

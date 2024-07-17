@@ -2,16 +2,13 @@ import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { CreateRequest, UpdateRequest } from '../types/property.types'
 import { IdRequest } from '../types/common.types'
-import { CreatePropertyDto } from '../dto/property/property-update.dto'
 import { PropertyService } from '../services/property.service'
-import { UpdatePropertyDto } from '../dto/property/property-create.dto'
+import { PropertyDtoMapper } from '../mappers/property.mapper'
 
 export const PropertyController = {
     create: async (req: CreateRequest, res: Response) => {
-        const property = await PropertyService.create(new CreatePropertyDto({
-            typeId: parseInt(req.body.typeId), 
-            name: req.body.name
-        }))
+        const createPropertyDto = PropertyDtoMapper.mapCreateDto(req)
+        const property = await PropertyService.create(createPropertyDto)
 
         res.status(StatusCodes.OK).send({
             property
@@ -29,14 +26,8 @@ export const PropertyController = {
     },
 
     update: async (req: UpdateRequest, res: Response) => {
-        const propertyId = parseInt(req.params.id)
-        const typeId = parseInt(req.body.typeId)
- 
-        const property = await PropertyService.update(new UpdatePropertyDto({
-            id: propertyId,
-            typeId, 
-            name: req.body.name
-        }))
+        const updatePropertyDto = PropertyDtoMapper.mapUpdateDto(req)
+        const property = await PropertyService.update(updatePropertyDto)
 
         res.status(StatusCodes.OK).send({
             property

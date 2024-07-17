@@ -3,16 +3,12 @@ import { StatusCodes } from 'http-status-codes'
 import { CreateRequest, UpdateRequest, PropertyActionRequest } from '../types/category.types'
 import { IdRequest } from '../types/common.types'
 import { CategoryService } from '../services/category.service'
-import { CreateCategoryDto } from '../dto/category/category-create.dto'
-import { UpdateCategoryDto } from '../dto/category/category-update.dto'
-import { CategoryPropertyDto } from '../dto/category/category-property.dto'
-import { UserService } from '../services/user.service'
+import { CategoryDtoMapper } from '../mappers/category.mapper'
 
 export const CategoryController = {
     create: async (req: CreateRequest, res: Response) => {
-        const category = await CategoryService.create(new CreateCategoryDto({
-            name: req.body.name
-        }))
+        const createCategoryDto = CategoryDtoMapper.mapCreateDto(req)
+        const category = await CategoryService.create(createCategoryDto)
 
         res.status(StatusCodes.OK).send({
             category
@@ -30,12 +26,8 @@ export const CategoryController = {
     },
 
     update: async (req: UpdateRequest, res: Response) => {
-        const categoryId = parseInt(req.params.id)
-        
-        const category = await CategoryService.update(new UpdateCategoryDto({
-            name: req.body.name,
-            id: categoryId
-        }))
+        const updateCategoryDto = CategoryDtoMapper.mapUpdateDto(req)
+        const category = await CategoryService.update(updateCategoryDto)
 
         res.status(StatusCodes.OK).send({
             category
@@ -44,7 +36,6 @@ export const CategoryController = {
 
     get: async (req: IdRequest, res: Response) => {
         const categoryId = parseInt(req.params.id)
-        
         const category = await CategoryService.get(categoryId)
 
         res.status(StatusCodes.OK).send({
@@ -61,13 +52,8 @@ export const CategoryController = {
     },
 
     addProperty: async (req: PropertyActionRequest, res: Response) => {
-        const propertyId = parseInt(req.params.propertyId)
-        const categoryId = parseInt(req.params.categoryId)
-
-        const category = await CategoryService.addProperty(new CategoryPropertyDto({
-            propertyId, 
-            categoryId
-        }))
+        const categoryPropertyDto = CategoryDtoMapper.mapPropertyDto(req)
+        const category = await CategoryService.addProperty(categoryPropertyDto)
 
         res.status(StatusCodes.OK).send({
             category
@@ -75,13 +61,8 @@ export const CategoryController = {
     },
 
     removeProperty: async (req: PropertyActionRequest, res: Response) => {
-        const propertyId = parseInt(req.params.propertyId)
-        const categoryId = parseInt(req.params.categoryId)
-
-        const category = await CategoryService.removeProperty(new CategoryPropertyDto({
-            propertyId, 
-            categoryId
-        }))
+        const categoryPropertyDto = CategoryDtoMapper.mapPropertyDto(req)
+        const category = await CategoryService.removeProperty(categoryPropertyDto)
 
         res.status(StatusCodes.OK).send({
             category

@@ -1,7 +1,6 @@
 import { CreateUserRequest, LoginUserRequest } from "../types/user.types"
 import { IdRequest, ITokens } from "../types/common.types"
-import { CreateUserDto } from "../dto/user/user-create.dto"
-import { LoginUserDto } from "../dto/user/user-login.dto"
+import { UserDtoMapper } from "../mappers/user.mapper"
 import { AuthService } from "../services/auth.service"
 import { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
@@ -10,27 +9,15 @@ import { BadRequest } from "@tsed/exceptions"
 
 export const AuthController = {
     register: async (req: CreateUserRequest , res: Response) => {
-        const file = req.file
-        
-        const {user, tokens} = await AuthService.register(new CreateUserDto({
-            email: req.body.email,
-            password: req.body.password,
-            roleId: parseInt(req.body.roleId),
-            name: req.body.name,
-            birthDate: new Date(req.body.birthDate),
-            profilePicture: file?.path
-        }))
+        const createUserdto = UserDtoMapper.mapCreateDto(req)
+        const {user, tokens} = await AuthService.register(createUserdto)
 
         res.cookie("jwt", tokens.accessToken, {httpOnly: true, secure: true})
         res.status(StatusCodes.OK).send({ user })
     },
 
     login: async (req: LoginUserRequest, res: Response) => {
-        const loginUserDto = new LoginUserDto({
-            email: req.body.email, 
-            password: req.body.password
-        })
-
+        const loginUserDto = UserDtoMapper.mapLoginDto(req)
         const result = await AuthService.login(loginUserDto)
         
         res.cookie("jwt", result.token, {httpOnly: true, secure: true})

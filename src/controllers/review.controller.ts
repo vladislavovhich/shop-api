@@ -2,28 +2,16 @@ import { Request, Response } from "express"
 import { CreateRequest, UpdateRequest, ReviewIdRequest } from "../types/review.types"
 import { UserService } from "../services/user.service"
 import { ReviewService } from "../services/review.service"
-import { CreateReviewDto } from "../dto/review/review-create.dto"
 import { StatusCodes } from "http-status-codes"
-import { UpdateReviewDto } from "../dto/review/review-update.dto"
-import { ProductService } from "../services/product.service"
-import { ReviewEditDto } from "../dto/review/review-edit.dto"
 import { IdRequest } from "../types/common.types"
+import { ReviewDtoMapper } from "../mappers/review.mapper"
 
 export const ReviewController = {
     writeReview: async (req: CreateRequest, res: Response) => {
         const user = await UserService.extractUserFromReq(req)
-        const files = req.files as Express.Multer.File[]
-        
-        const review = await ReviewService.create(new CreateReviewDto({
-            rating: parseInt(req.body.rating),
-            text: req.body.text,
-            productId: parseInt(req.params.productId),
-            userId: user.id,
-            date: new Date(),
-            images: files?.map(file => file.path)
-        }))
+        const createReviewDto = ReviewDtoMapper.mapCreateDto(req, user)
+        const review = await ReviewService.create(createReviewDto)
 
-        console.log(req.files)
         res.status(StatusCodes.OK).send({
             review
         })
@@ -31,15 +19,8 @@ export const ReviewController = {
 
     updateReview: async (req: UpdateRequest, res: Response) => {
         const user = await UserService.extractUserFromReq(req)
-        const files = req.files as Express.Multer.File[]
-
-        const review = await ReviewService.update(new UpdateReviewDto({
-            rating: parseInt(req.body.rating),
-            text: req.body.text,
-            reviewId: parseInt(req.params.reviewId),
-            userId: user.id,
-            images: files?.map(file => file.path)
-        }))
+        const updateReviewDto = ReviewDtoMapper.mapUpdateDto(req, user)
+        const review = await ReviewService.update(updateReviewDto)
 
         res.status(StatusCodes.OK).send({
             review
@@ -47,10 +28,9 @@ export const ReviewController = {
     },
 
     deleteReview: async (req: ReviewIdRequest, res: Response) => {
-        await ReviewService.delete(new ReviewEditDto({
-            reviewId: parseInt(req.params.reviewId),
-            productId: parseInt(req.params.productId)
-        }))
+        const deleteReviewDto = ReviewDtoMapper.mapDeleteDto(req)
+
+        await ReviewService.delete(deleteReviewDto)
 
         res.sendStatus(StatusCodes.OK)
     },

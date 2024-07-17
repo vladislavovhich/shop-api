@@ -39,6 +39,7 @@ Review.init({
     sequelize,
     modelName: 'review',
     timestamps: false,
+    tableName: "reviews"
 })
 
 User.hasMany(Review)

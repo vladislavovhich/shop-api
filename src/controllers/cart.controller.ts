@@ -4,35 +4,26 @@ import { UserService } from "../services/user.service"
 import { CartService } from "../services/cart.service"
 import { CartOperationDto } from "../dto/cart/cart-operation.dto"
 import { StatusCodes } from "http-status-codes"
+import { CartDtoMapper } from "../mappers/cart.mapper"
 
 export const CartController = {
     addToCart: async (req: IdRequest, res: Response) => {
-        let user = await UserService.extractUserFromReq(req)
-
-        const userId = user.id
-        const productId = parseInt(req.params.id)
-
-        user = await CartService.addProductToCart(new CartOperationDto({
-            userId, productId
-        }))
+        const user = await UserService.extractUserFromReq(req)
+        const addProductDto = CartDtoMapper.mapOperationDto(req, user)
+        const result = await CartService.addProductToCart(addProductDto)
 
         res.status(StatusCodes.OK).send({
-            user
+            result
         })
     },
 
     removeFromCart: async (req: IdRequest, res: Response) => {
-        let user = await UserService.extractUserFromReq(req)
-
-        const userId = user.id
-        const productId = parseInt(req.params.id)
-
-        user = await CartService.removeProductFromCart(new CartOperationDto({
-            userId, productId
-        }))
+        const user = await UserService.extractUserFromReq(req)
+        const cartOperationDto = CartDtoMapper.mapOperationDto(req, user)
+        const result = await CartService.removeProductFromCart(cartOperationDto)
 
         res.status(StatusCodes.OK).send({
-            user
+            result
         })
     },
 
